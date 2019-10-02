@@ -1,0 +1,20 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: countries
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: countries
+  template:
+    metadata:
+      labels:
+        app: countries
+    spec:
+      containers:
+      - name: countries
+        image: countries-app
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080

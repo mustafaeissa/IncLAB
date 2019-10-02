@@ -1,0 +1,31 @@
+---
+- hosts: localhost
+  tasks:
+  - name: Build Docker images From Dockerfiles
+    docker_image:
+      build:
+        path: "./images/{{ item.directory }}"
+      name: "{{ item.name }}"
+      tag: "{{ item.tag }}"
+      source: build
+      state: present
+    with_items:
+      - { name: airports-app, tag: v1, directory: airportsAppV1 }
+      - { name: airports-app, tag: v2, directory: airportsAppV2 }
+      - { name: countries-app, tag: v1, directory: countriesAppV1}
+    register: image_build
+
+  - name: Tag and push to docker hub
+    docker_image:
+      name: "{{ item.name }}:{{ item.tag }}"
+      repository: "moustafa3issa/{{ item.name }}:{{ item.tag }}"
+      push: yes
+      state: present
+      source: local
+    with_items:
+      - { name: airports-app, tag: v1 }
+      - { name: airports-app, tag: v2 }
+      - { name: countries-app, tag: v1 }
+    when: image_build.changed
+
+
