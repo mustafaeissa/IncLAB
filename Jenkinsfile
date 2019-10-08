@@ -25,10 +25,15 @@ pipeline {
         sh 'helm install --name IncLAB ./airports-app'
       }
     }
-    stage('Create an Ingress Object to Expose Apps') {
+    stage('Install the ingress controller') {
       steps {
-        sh 'kubectl apply -f ingress-nginx.yaml'
+        sh 'helm install stable/nginx-ingress --name nginx-ingress --set controller.publishService.enabled=true'
       }
     }
+    stage('Create ingress resource to expose Apps'){
+      steps {
+        sh 'kubectl apply -f ingress-nginx.yaml'
+     }
+   }
   }
 }
