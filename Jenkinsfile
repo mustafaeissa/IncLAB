@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Cloning Git') {
       steps {
-        git 'https://github.com/mustafaeissa/Vtask'
+        git 'https://github.com/mustafaeissa/IncLAB'
       }
     }
     stage('Building & Pushing Imaages') {
